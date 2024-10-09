@@ -16,6 +16,7 @@ select c.name from customers cust JOIN clients c ON cust.customer_id = c.id;
 create index orders_customer_id_order_date_index
     on orders(customer_id, order_date);
 
+-- Вообщем рекомендуют использовать партиционирование таблицы по датам
 -- Составной индекс. Прирост скорости в 2 раза.
 
 
@@ -24,10 +25,10 @@ create index orders_customer_id_order_date_index
 
 EXPLAIN ANALYSE
 with most_orders as(
-    select o.customer_id, count(o.customer_id)
+    select o.customer_id, count(*)
     from orders o
     group by o.customer_id
-    order by count(o.customer_id) desc
+    order by count(*) desc
     limit 5
 )
 select c.name from most_orders m JOIN clients c ON m.customer_id = c.id;
