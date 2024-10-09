@@ -15,4 +15,5 @@ make up && make install && make tables && make client && make text && make run
 5) make text
 6) make run
 
-Запросы с индексами giв файле queries.s
+Запросы с индексами в файле queries.sql
+
