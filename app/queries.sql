@@ -4,10 +4,14 @@
 --7 дней.
 
 EXPLAIN ANALYSE
-select c.name from clients c JOIN orders o
-ON c.id = o.customer_id where order_date
-BETWEEN
-current_timestamp - make_interval(days := 7) AND current_timestamp;
+with customers as (
+    select o.customer_id, max(o.order_date)
+    from clients c
+    JOIN orders o ON c.id = o.customer_id
+    group by o.customer_id
+    having max(o.order_date) < (current_timestamp - make_interval(days := 7))
+)
+select c.name from customers cust JOIN clients c ON cust.customer_id = c.id;
 
 create index orders_customer_id_order_date_index
     on orders(customer_id, order_date);
